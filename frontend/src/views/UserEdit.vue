@@ -4,15 +4,19 @@
       <div class="col-md-5">
         <div class="card">
           <div class="card-body">
-            <h2>Edit Post</h2>
-            <form @submit.prevent="editPost">
+            <h2>Edit User</h2>
+            <form @submit.prevent="editUser">
               <div class="form-group mt-4">
-                <label for="title">Title:</label>
-                <input id="title" v-model="post.title" type="text" class="form-control input-narrow" required>
+                <label for="name">Name:</label>
+                <input id="name" v-model="user.name" type="text" class="form-control input-narrow" required>
               </div>
               <div class="form-group">
-                <label for="body">Body:</label>
-                <textarea id="body" v-model="post.body" class="form-control input-narrow" required></textarea>
+                <label for="email">Email:</label>
+                <input id="email" v-model="user.email" type="email" class="form-control input-narrow" required>
+              </div>
+              <div class="form-group">
+                <label for="password">Password:</label>
+                <input id="password" v-model="user.password" type="password" class="form-control input-narrow">
               </div>
               <button type="submit" class="btn btn-dark btn-narrow mt-4">Save Changes</button>
               <div v-if="error" class="alert alert-danger mt-3">
@@ -30,7 +34,7 @@
 import apiService from '@/api-service';
 
 export default {
-  name: 'PostEdit',
+  name: 'UserEdit',
   props: {
     id: {
       type: String,
@@ -39,28 +43,30 @@ export default {
   },
   data() {
     return {
-      post: {
-        title: '',
-        body: ''
+      user: {
+        name: '',
+        email: '',
+        password: ''
       },
       error: ''
     };
   },
   async created() {
+    console.log(this.id);
     try {
-      const response = await apiService.getPost(this.id);
-      this.post = response.data;
+      const response = await apiService.getUser(this.id);
+      this.user = response.data;
     } catch (error) {
-      this.error = 'Error fetching post: ' + error.message;
+      this.error = 'Error fetching user: ' + error.message;
     }
   },
   methods: {
-    async editPost() {
+    async editUser() {
       try {
-        await apiService.updatePost(this.id, this.post);
-        this.$router.push({ name: 'ShowPost', params: { id: this.id } });
+        await apiService.updateUser(this.id, this.user);
+        this.$router.push({ name: 'ShowUser', params: { id: this.id } });
       } catch (error) {
-        this.error = 'Error editing post: ' + error.message;
+        this.error = 'Error editing user: ' + error.message;
       }
     }
   }

@@ -6,13 +6,16 @@ import PostIndex from '../views/PostIndex.vue';
 import PostCreate from '../views/PostCreate.vue';
 import PostShow from '../views/PostShow.vue';
 import PostEdit from '../views/PostEdit.vue';
+import UserIndex from '../views/UserIndex.vue';
+import UserShow from '../views/UserShow.vue';
+import UserEdit from '../views/UserEdit.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: HelloWorld,
-    props: { msg: 'Welcome to Your Vue.js App' }
+    props: { msg: 'Welcome to Your Social Media App 🥳' }
   },
   {
     path: '/signup',
@@ -30,6 +33,11 @@ const routes = [
     component: PostIndex
   },
   {
+    path: '/users',
+    name: 'UserIndex',
+    component: UserIndex
+  },
+  {
     path: '/posts/create',
     name: 'PostCreate',
     component: PostCreate
@@ -40,11 +48,22 @@ const routes = [
     component: PostShow,
     props: true,
   },
-
+  {
+    path: '/users/:id',
+    name: 'ShowUser',
+    component: UserShow,
+    props: true,
+  },
   {
     path: '/posts/:id/edit',
     name: 'EditPost',
     component: PostEdit,
+    props: true,
+  },
+  {
+    path: '/users/:id/edit',
+    name: 'EditUser',
+    component: UserEdit,
     props: true,
   },
 ];
@@ -52,6 +71,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+// Navigation guard to check if user is authenticated
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  if (to.name !== 'UserLogin' && to.name !== 'UserSignup' && !token) {
+    // Redirect to login if trying to access any route other than UserLogin and UserSignup without a token
+    next({ name: 'UserLogin' });
+  } else {
+    next(); // Proceed to the requested route
+  }
 });
 
 export default router;

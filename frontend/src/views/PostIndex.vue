@@ -1,31 +1,30 @@
 <template>
-  <div>
-    <h2>Posts</h2>
-    <button @click="$router.push('/posts/create')" class="btn btn-primary mb-3">Create Post</button>
-    <div class="table-container">
-      <table v-if="posts.length" class="table table-striped">
-        <thead class="thead-light">
-          <tr>
-            <th>Title</th>
-            <th>Body</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="post in posts" :key="post.id">
-            <td><router-link :to="{ name: 'ShowPost', params: { id: post.id } }">{{ post.title }}</router-link></td>
-            <td>{{ post.body }}</td>
-            <td>
-              <div v-if="post.user_id === current_user.id">
-                <button @click="editPost(post.id)" class="btn btn-sm btn-outline-primary">Edit</button>
-                <button @click="deletePost(post.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+  <div class="container-fluid py-5">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="mb-0">Posts</h2>
+          <button @click="$router.push('/posts/create')" class="btn btn-dark">Create Post</button>
+        </div>
+        <div v-if="posts.length" class="row">
+          <div v-for="post in posts" :key="post.id" class="col-md-4 mb-4">
+            <div class="card h-100 post-card" @click="viewPost(post.id)">
+              <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ truncatedBody(post.body) }}</p>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-else>
-        No posts found.
+              <div class="card-footer text-right">
+                <div v-if="post.user_id === current_user.id" class="btn-group">
+                  <button @click.stop="editPost(post.id)" class="btn btn-sm btn-outline-dark">Edit</button>
+                  <button @click.stop="deletePost(post.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="alert">
+          No posts yet. 🤔
+        </div>
       </div>
     </div>
   </div>
@@ -56,6 +55,9 @@ export default {
     }
   },
   methods: {
+    viewPost(postID) {
+      this.$router.push({ name: 'ShowPost', params: { id: postID } });
+    },
     editPost(postID) {
       this.$router.push({ name: 'EditPost', params: { id: postID } });
     },
@@ -66,50 +68,64 @@ export default {
       } catch (error) {
         console.error('Error deleting post:', error);
       }
+    },
+    truncatedBody(body) {
+      const words = body.split(' ');
+      return words.length > 20 ? words.slice(0, 20).join(' ') + '...' : body;
     }
   }
 };
 </script>
 
 <style scoped>
-.table-container {
-  margin: 10px 0;
-}
-
-/* Bootstrap classes for table */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th, .table td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.table th {
-  background-color: #f2f2f2;
-}
-
-/* Button styles */
-.btn {
+.post-card {
   cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.btn-primary {
-  background-color: #007bff;
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.card-footer {
+  background-color: #fff;
+  border-top: 0;
+}
+
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.btn-group .btn {
+  margin-right: 5px;
+}
+
+.btn-group .btn:last-child {
+  margin-right: 0;
+}
+
+.btn-dark, .btn-outline-dark {
+  background-color: #343a40;
   color: #fff;
   border: none;
 }
 
-.btn-outline-primary {
-  color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-outline-primary:hover {
-  background-color: #007bff;
+.btn-outline-dark:hover {
+  background-color: #23272b;
   color: #fff;
 }
 

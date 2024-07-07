@@ -1,4 +1,3 @@
-// src/services/api_service.js
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -22,18 +21,29 @@ export const apiService = {
       user: { email, password }
     });
   },
-
+  signup(userData) {
+    return axiosInstance.post('/signup', {
+      user: userData
+    });
+  },
   getPosts() {
     return axiosInstance.get('/posts');
+  },
+
+  getUsers() {
+    return axiosInstance.get('/users');
   },
 
   getUser(userID) {
     return axiosInstance.get(`/users/${userID}`);
   },
 
-
   deletePost(postID) {
     return axiosInstance.delete(`/posts/${postID}`);
+  },
+
+  deleteUser(userID) {
+    return axiosInstance.delete(`/users/${userID}`);
   },
 
   getPost(postID) {
@@ -47,6 +57,10 @@ export const apiService = {
 
   updatePost(postID, postData) {
     return axiosInstance.put(`/posts/${postID}`, postData);
+  },
+
+  updateUser(userID, userData) {
+    return axiosInstance.put(`/users/${userID}`, userData);
   },
 
 
