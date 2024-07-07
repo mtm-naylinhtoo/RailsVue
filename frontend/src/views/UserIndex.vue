@@ -9,7 +9,14 @@
           <div v-for="user in users" :key="user.id" class="col-md-4 mb-4">
             <div class="card h-100 user-card" @click="viewUser(user.id)">
               <div class="card-body">
-                <h5 class="card-title">{{ user.name }}</h5>
+                <h5 class="card-title">
+                  <span v-if="user.id === current_user.id">
+                    You 🫵
+                  </span>
+                  <span v-else>
+                    {{ user.name }}
+                  </span>
+                </h5>
                 <p class="card-text">{{ user.email }}</p>
               </div>
               <div v-if="user.id === current_user.id" class="card-footer text-right">
