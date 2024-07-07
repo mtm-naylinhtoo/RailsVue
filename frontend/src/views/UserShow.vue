@@ -35,7 +35,7 @@
                     <div class="card-body">
                       <h5 class="card-title">{{ post.title }}</h5>
                       <p class="card-text">{{ post.body }}</p>
-                      <router-link :to="{ name: 'ShowPost', params: { id: post.id } }" class="btn btn-sm btn-outline-primary">View Post</router-link>
+                      <router-link :to="{ name: 'ShowPost', params: { id: post.id } }" class="btn btn-sm btn-outline-dark">View Post</router-link>
                     </div>
                   </div>
                 </div>

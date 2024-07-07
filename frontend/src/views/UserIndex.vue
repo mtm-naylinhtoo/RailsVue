@@ -67,7 +67,6 @@ export default {
     },
     async deleteUser(userId) {
       try {
-        console.log(userId);
         await apiService.deleteUser(userId);
         this.users = this.users.filter(user => user.id !== userId);
         localStorage.removeItem('token');

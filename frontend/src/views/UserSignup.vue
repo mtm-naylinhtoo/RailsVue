@@ -48,7 +48,6 @@ export default {
     async signup() {
       try {
         const response = await apiService.signup(this.formData);
-        console.log('Signup successful:', response.data);
         this.$router.push('/login');
       } catch (error) {
         this.error = 'Error signing up. Please try again.';

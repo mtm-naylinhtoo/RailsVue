@@ -52,7 +52,6 @@ export default {
     };
   },
   async created() {
-    console.log(this.id);
     try {
       const response = await apiService.getUser(this.id);
       this.user = response.data;
@@ -62,8 +61,13 @@ export default {
   },
   methods: {
     async editUser() {
+      const userData = {
+        name: this.user.name,
+        email: this.user.email,
+        password: this.user.password
+      };
       try {
-        await apiService.updateUser(this.id, this.user);
+        await apiService.updateUser(this.id, userData);
         this.$router.push({ name: 'ShowUser', params: { id: this.id } });
       } catch (error) {
         this.error = 'Error editing user: ' + error.message;

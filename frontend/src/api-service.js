@@ -60,7 +60,7 @@ export const apiService = {
   },
 
   updateUser(userID, userData) {
-    return axiosInstance.put(`/users/${userID}`, userData);
+    return axiosInstance.put(`/users/${userID}`, { user: userData });
   },
 
 
