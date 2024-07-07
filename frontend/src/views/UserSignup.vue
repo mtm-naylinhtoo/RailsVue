@@ -19,6 +19,9 @@
               <div v-if="error" class="alert mt-3">
                 <span>{{ error }}</span>
               </div>
+              <div v-if="successMessage" class="alert mt-3">
+                <span>{{ successMessage }}</span>
+              </div>
             </form>
             <div class="mt-3">
               <p>Already have an account? <router-link to="/login">Sign In</router-link></p>
@@ -41,14 +44,18 @@ export default {
         email: '',
         password: ''
       },
-      error: ''
+      error: '',
+      successMessage: ''
     };
   },
   methods: {
     async signup() {
       try {
-        const response = await apiService.signup(this.formData);
-        this.$router.push('/login');
+        await apiService.signup(this.formData);
+        this.successMessage = 'Sign up successful! Redirecting to login...';
+        setTimeout(() => {
+          this.$router.push('/login');
+        }, 2000);
       } catch (error) {
         this.error = 'Error signing up. Please try again.';
         console.error('Error signing up:', error);
